@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/docopt/docopt.go"
 	"github.com/op/go-logging"
@@ -10,41 +11,56 @@ import (
 const configFilename = "./config.toml"
 
 var (
-	log    = logging.MustGetLogger("nutrition")
-	mode   = ""
-	action = ""
+	log = logging.MustGetLogger("nutrition")
 )
 
 const usage = `
 	Usage:
 	nutrition settings show
+	nutrition settings set <entry> <value>
 `
 
+var config Config
+
 func main() {
+	var err error
+
 	args, _ := docopt.Parse(usage, nil, true, "nutrition", false)
 
-	config, _ := configRead(configFilename)
-
-	if _, ok := args["settings"]; ok {
-		mode = "settings"
-
-		if _, ok := args["show"]; ok {
-			action = "show"
-		}
+	config, err = configRead(configFilename)
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	switch mode {
-	case "settings":
-		if action == "show" {
-			fmt.Print(config)
+	if args["settings"].(bool) {
+		if args["show"].(bool) {
+			settingsShow()
+			os.Exit(0)
+		} else if args["set"].(bool) {
+			newConfig, err := configChange(
+				config,
+				args["<entry>"].(string),
+				args["<value>"].(string),
+			)
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			err = configWrite(configFilename, newConfig)
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			os.Exit(0)
 		}
-
 	}
-
 }
 
-//@TODO: update configuration file with new data
-//	./cmd settings set <entry> <value>
+func settingsShow() {
+	fmt.Print(config)
+}
 
 //@TODO: command line tool interface
 //	./cmd add <product>

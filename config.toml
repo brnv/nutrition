@@ -1,5 +1,5 @@
-[settings]
-carbohydrates = 150.0
-proteins = 100.0
-fats = 30.0
-calories = 1500.0
+[Settings]
+  Carbohydrates = 150.0
+  Proteins = 100.0
+  Fats = 30.0
+  Calories = 1500.0
