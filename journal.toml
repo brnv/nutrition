@@ -1,0 +1,10 @@
+[[entry]]
+date = 2015-02-20
+	[[meals]]
+	type = breakfast
+		[[products]]
+		name = oatmeal
+		weight = 80
+		[[products]]
+		name = milk
+		weight = 250

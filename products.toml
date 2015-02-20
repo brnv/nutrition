@@ -1,0 +1,11 @@
+[products]
+	[products.oatmeal]
+	carbohydrates = 61.8
+	proteins = 12.3
+	fats = 6.2
+	calories = 352
+	[products.milk_2.5]
+	carbohydrates = 4.7
+	proteins = 2.8
+	fats = 2.5
+	calories = 53
