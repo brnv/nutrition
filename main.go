@@ -36,22 +36,13 @@ func main() {
 		if args["show"].(bool) {
 			settingsShow()
 			os.Exit(0)
-		} else if args["set"].(bool) {
-			newConfig, err := configChange(
-				config,
+		}
+
+		if args["set"].(bool) {
+			settingsSet(
 				args["<entry>"].(string),
 				args["<value>"].(string),
 			)
-
-			if err != nil {
-				log.Fatal(err.Error())
-			}
-
-			err = configWrite(configFilename, newConfig)
-
-			if err != nil {
-				log.Fatal(err.Error())
-			}
 
 			os.Exit(0)
 		}
@@ -60,6 +51,24 @@ func main() {
 
 func settingsShow() {
 	fmt.Print(config)
+}
+
+func settingsSet(entry string, value string) {
+	newConfig, err := configChange(
+		config,
+		entry,
+		value,
+	)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	err = configWrite(configFilename, newConfig)
+
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
 //@TODO: command line tool interface
