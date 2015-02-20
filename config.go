@@ -15,6 +15,7 @@ import (
 
 type Config struct {
 	Settings struct {
+		//@TODO: move to separate structure and embed it here
 		Carbohydrates float64 `json:"carbohydrates"`
 		Proteins      float64 `json:"proteins"`
 		Fats          float64 `json:"fats"`
@@ -57,6 +58,8 @@ func configRead(filename string) (Config, error) {
 }
 
 func configChange(config Config, entry string, value string) (Config, error) {
+	//@TODO: implement changing by different config chunks, not
+	//by hardcoded config.Settings
 	field := reflect.
 		Indirect(reflect.ValueOf(&config.Settings)).
 		FieldByName(UCFirstLetter(entry))
