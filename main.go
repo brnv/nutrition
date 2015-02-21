@@ -9,6 +9,7 @@ import (
 )
 
 const configFilename = "./config.toml"
+const productsFile = "./products.toml"
 
 var (
 	log = logging.MustGetLogger("nutrition")
@@ -18,6 +19,7 @@ const usage = `
 	Usage:
 	nutrition settings show
 	nutrition settings set <entry> <value>
+	nutrition product add <product>
 `
 
 var config Config
@@ -29,7 +31,7 @@ func main() {
 
 	config, err = configRead(configFilename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	if args["settings"].(bool) {
@@ -43,6 +45,31 @@ func main() {
 				args["<entry>"].(string),
 				args["<value>"].(string),
 			)
+
+			os.Exit(0)
+		}
+	}
+
+	//@TODO: check if product with that name exists
+	if args["product"].(bool) {
+		if args["add"].(bool) {
+			products, err := productsRead(productsFile)
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			newProducts, err := productAdd(products, args["<product>"].(string))
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			err = productsWrite(productsFile, newProducts)
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
 
 			os.Exit(0)
 		}
@@ -72,7 +99,8 @@ func settingsSet(entry string, value string) {
 }
 
 //@TODO: command line tool interface
-//	./cmd add <product>
+//	./cmd product edit
+//	./cmd product edit <product>
 //	./cmd check <product> <weight>
 //	./cmd eat (breakfast|lunch|snack|dinner) <product> <weight>
 //  ./cmd journal

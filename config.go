@@ -16,10 +16,10 @@ import (
 type Config struct {
 	Settings struct {
 		//@TODO: move to separate structure and embed it here
-		Carbohydrates float64 `json:"carbohydrates"`
-		Proteins      float64 `json:"proteins"`
-		Fats          float64 `json:"fats"`
-		Calories      float64 `json:"calories"`
+		Carbohydrates float64 `toml:"carbohydrates"`
+		Proteins      float64 `toml:"proteins"`
+		Fats          float64 `toml:"fats"`
+		Calories      float64 `toml:"calories"`
 	}
 }
 
@@ -42,6 +42,7 @@ func (config Config) String() string {
 	return buf.String()
 }
 
+//@TODO: implement common function to handle file reading
 func configRead(filename string) (Config, error) {
 	config := Config{}
 
