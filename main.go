@@ -155,6 +155,8 @@ func settingsSet(entry string, value string) {
 }
 
 //@TODO: command line tool interface
+//	./cmd product list
+//	./cmd product show <product>
 //	./cmd product edit
 //	./cmd product edit <product>
 //	./cmd check <product> <weight>

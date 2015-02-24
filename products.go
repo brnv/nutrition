@@ -51,6 +51,7 @@ func productAdd(products Products, productName string) (Products, error) {
 		return products, err
 	}
 
+	//@TODO: [0] looks ugly, find another way to do that
 	products.Product = append(products.Product, newProduct.Product[0])
 
 	return products, nil
