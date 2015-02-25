@@ -19,17 +19,12 @@ type Meal struct {
 	Products []JournalProduct
 }
 
-type Breakfast Meal
-type Snack Meal
-type Lunch Meal
-type Dinner Meal
-
 type JournalEntry struct {
 	Day       time.Time
-	Breakfast Breakfast
-	Snack     Snack
-	Lunch     Lunch
-	Dinner    Dinner
+	Breakfast Meal
+	Snack     Meal
+	Lunch     Meal
+	Dinner    Meal
 }
 
 type Journal struct {
@@ -67,7 +62,7 @@ func journalAdd(mealType string, productName string, weight float64) error {
 		} else {
 			journal.Entry = append(journal.Entry, JournalEntry{
 				Day: getCurrentDay(),
-				Breakfast: Breakfast{
+				Breakfast: Meal{
 					Products: []JournalProduct{
 						product,
 					},
@@ -84,7 +79,7 @@ func journalAdd(mealType string, productName string, weight float64) error {
 		} else {
 			journal.Entry = append(journal.Entry, JournalEntry{
 				Day: getCurrentDay(),
-				Snack: Snack{
+				Snack: Meal{
 					Products: []JournalProduct{
 						product,
 					},
@@ -101,7 +96,7 @@ func journalAdd(mealType string, productName string, weight float64) error {
 		} else {
 			journal.Entry = append(journal.Entry, JournalEntry{
 				Day: getCurrentDay(),
-				Lunch: Lunch{
+				Lunch: Meal{
 					Products: []JournalProduct{
 						product,
 					},
@@ -118,7 +113,7 @@ func journalAdd(mealType string, productName string, weight float64) error {
 		} else {
 			journal.Entry = append(journal.Entry, JournalEntry{
 				Day: getCurrentDay(),
-				Dinner: Dinner{
+				Dinner: Meal{
 					Products: []JournalProduct{
 						product,
 					},
