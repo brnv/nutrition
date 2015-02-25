@@ -1,10 +1,14 @@
-[[entry]]
-date = 2015-02-20
-	[[meals]]
-	type = breakfast
-		[[products]]
-		name = oatmeal
-		weight = 80
-		[[products]]
-		name = milk
-		weight = 250
+[[Entry]]
+  Day = 2015-02-25T00:00:00Z
+  [Entry.Breakfast]
+
+    [[Entry.Breakfast.Products]]
+      Name = "oatmeal"
+      Weight = 80.0
+  [Entry.Snack]
+  [Entry.Lunch]
+
+    [[Entry.Lunch.Products]]
+      Name = "oatmeal"
+      Weight = 80.0
+  [Entry.Dinner]

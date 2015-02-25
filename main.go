@@ -12,6 +12,7 @@ import (
 	"github.com/seletskiy/tplutil"
 )
 
+//@TODO: rename to configFile
 const configFilename = "./config.toml"
 const productsFile = "./products.toml"
 
@@ -25,6 +26,7 @@ const usage = `
 	nutrition settings set <entry> <value>
 	nutrition product add <product>
 	nutrition check <product> <weight>
+	nutrition eat (breakfast|lunch|snack|dinner) <product> <weight>
 `
 
 var config Config
@@ -90,6 +92,49 @@ func main() {
 			args["<product>"].(string),
 			weightFloat,
 		)
+	}
+
+	if args["eat"].(bool) {
+		mealType := ""
+		if args["breakfast"].(bool) {
+			mealType = "breakfast"
+		}
+
+		if args["lunch"].(bool) {
+			mealType = "lunch"
+		}
+
+		if args["snack"].(bool) {
+			mealType = "snack"
+		}
+
+		if args["dinner"].(bool) {
+			mealType = "dinner"
+		}
+
+		weightFloat, err := strconv.ParseFloat(args["<weight>"].(string), 64)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		eat(
+			mealType,
+			args["<product>"].(string),
+			weightFloat,
+		)
+	}
+}
+
+//@TODO: check if this product exists
+func eat(mealType string, productName string, weight float64) {
+	err := journalAdd(
+		mealType,
+		productName,
+		weight,
+	)
+
+	if err != nil {
+		log.Fatal(err.Error())
 	}
 }
 
@@ -159,7 +204,4 @@ func settingsSet(entry string, value string) {
 //	./cmd product show <product>
 //	./cmd product edit
 //	./cmd product edit <product>
-//	./cmd check <product> <weight>
-//	./cmd eat (breakfast|lunch|snack|dinner) <product> <weight>
-//  ./cmd journal
-//  ./cmd journal (today)
+//  ./cmd journal (edit) (today)

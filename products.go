@@ -9,6 +9,7 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
+//@TODO: product nutition fact to separate structure
 type product struct {
 	Name          string
 	Carbohydrates float64 `toml:"carbohydrates"`
