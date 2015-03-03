@@ -27,6 +27,7 @@ const usage = `
 	nutrition product add <product>
 	nutrition check <product> <weight>
 	nutrition eat (breakfast|lunch|snack|dinner) <product> <weight>
+	nutrition journal (list|today)
 `
 
 var config Config
@@ -122,6 +123,15 @@ func main() {
 			args["<product>"].(string),
 			weightFloat,
 		)
+	}
+
+	if args["journal"].(bool) {
+		if args["today"].(bool) {
+			showJournal("today")
+		}
+		if args["list"].(bool) {
+			showJournal("list")
+		}
 	}
 }
 

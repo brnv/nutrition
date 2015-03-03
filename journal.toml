@@ -12,3 +12,14 @@
       Name = "oatmeal"
       Weight = 80.0
   [Entry.Dinner]
+
+[[Entry]]
+  Day = 2015-03-03T00:00:00Z
+  [Entry.Breakfast]
+
+    [[Entry.Breakfast.Products]]
+      Name = "oatmeal"
+      Weight = 80.0
+  [Entry.Snack]
+  [Entry.Lunch]
+  [Entry.Dinner]

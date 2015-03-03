@@ -4,10 +4,13 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
+	"text/template"
 	"time"
 
 	"github.com/BurntSushi/toml"
+	"github.com/seletskiy/tplutil"
 )
 
 type JournalProduct struct {
@@ -31,7 +34,75 @@ type Journal struct {
 	Entry []JournalEntry
 }
 
+//@TODO: check last element and don't append new line to it
+const journalShowTpl = `
+	{{range .Entry}}
+		{{.Day}}
+		{{"\n"}}
+		Breakfast:
+		{{"\n"}}
+			{{range .Breakfast.Products}}
+				{{.Name}}, {{.Weight}}
+				{{"\n"}}
+			{{end}}
+		Snack:
+		{{"\n"}}
+			{{range .Snack.Products}}
+				{{.Name}}, {{.Weight}}
+				{{"\n"}}
+			{{end}}
+		Lunch:
+		{{"\n"}}
+			{{range .Lunch.Products}}
+				{{.Name}}, {{.Weight}}
+				{{"\n"}}
+			{{end}}
+		Dinner:
+		{{"\n"}}
+			{{range .Dinner.Products}}
+				{{.Name}}, {{.Weight}}
+				{{"\n"}}
+			{{end}}
+		{{"\n"}}
+	{{end}}
+`
+
+func (journal Journal) String() string {
+	myTpl := template.Must(
+		template.New("journalShowTpl").Parse(tplutil.Strip(
+			journalShowTpl,
+		)))
+
+	buf := bytes.NewBuffer([]byte{})
+	myTpl.Execute(buf, journal)
+
+	return buf.String()
+}
+
 const journalFile = "./journal.toml"
+
+func showJournal(mode string) error {
+	journal, err := journalRead(journalFile)
+	if err != nil {
+		return err
+	}
+
+	switch mode {
+	case "today":
+		for _, entry := range journal.Entry {
+			if entry.Day == getCurrentDay() {
+				newJournal := Journal{}
+				newJournal.Entry = append(newJournal.Entry, entry)
+				fmt.Print(newJournal)
+				break
+			}
+		}
+	case "list":
+		fmt.Print(journal)
+	}
+
+	return nil
+}
 
 func journalAdd(mealType string, productName string, weight float64) error {
 	journal, err := journalRead(journalFile)
