@@ -127,10 +127,11 @@ func main() {
 
 	if args["journal"].(bool) {
 		if args["today"].(bool) {
-			showJournal("today")
+			journalShow("today")
 		}
+
 		if args["list"].(bool) {
-			showJournal("list")
+			journalShow("list")
 		}
 	}
 }

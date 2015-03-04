@@ -42,8 +42,9 @@ const journalShowTpl = `
 		Breakfast:
 		{{"\n"}}
 			{{range .Breakfast.Products}}
-				{{.Name}}, {{.Weight}}
+				{{.Name}}, {{.Weight}} {{calculate .Name}}
 				{{"\n"}}
+
 			{{end}}
 		Snack:
 		{{"\n"}}
@@ -67,10 +68,18 @@ const journalShowTpl = `
 	{{end}}
 `
 
+func calculate(productName string) string {
+	return productName
+}
+
+var funcs = template.FuncMap{
+	"calculate": calculate,
+}
+
 //@TODO: do template parsing in initialize function
 func (journal Journal) String() string {
 	myTpl := template.Must(
-		template.New("journalShowTpl").Parse(tplutil.Strip(
+		template.New("journalShowTpl").Funcs(funcs).Parse(tplutil.Strip(
 			journalShowTpl,
 		)))
 
@@ -82,7 +91,7 @@ func (journal Journal) String() string {
 
 const journalFile = "./journal.toml"
 
-func showJournal(mode string) error {
+func journalShow(mode string) error {
 	journal, err := journalRead(journalFile)
 	if err != nil {
 		return err
