@@ -67,6 +67,7 @@ const journalShowTpl = `
 	{{end}}
 `
 
+//@TODO: do template parsing in initialize function
 func (journal Journal) String() string {
 	myTpl := template.Must(
 		template.New("journalShowTpl").Parse(tplutil.Strip(
@@ -89,6 +90,7 @@ func showJournal(mode string) error {
 
 	switch mode {
 	case "today":
+		//@TODO: move this loop to separate function
 		for _, entry := range journal.Entry {
 			if entry.Day == getCurrentDay() {
 				newJournal := Journal{}
