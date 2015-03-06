@@ -1,15 +1,12 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 	"strconv"
-	"text/template"
 
 	"github.com/docopt/docopt.go"
 	"github.com/op/go-logging"
-	"github.com/seletskiy/tplutil"
 )
 
 //@TODO: rename to configFile
@@ -151,41 +148,8 @@ func eat(mealType string, productName string, weight float64) {
 
 //@TODO: move calculations to another file
 
-const productImpactTpl = `
-	carbohydrates = {{.Carbohydrates}}%{{"\n"}}
-	proteins = {{.Proteins}}%{{"\n"}}
-	fats = {{.Fats}}%{{"\n"}}
-	calories = {{.Calories}}%{{"\n"}}
-`
-
 func checkProductImpact(productName string, weight float64) {
-	products, _ := productsRead(productsFile)
-
-	for _, product := range products.Product {
-		if product.Name == productName {
-			impact := struct {
-				Carbohydrates float64
-				Proteins      float64
-				Fats          float64
-				Calories      float64
-			}{
-				Carbohydrates: product.Carbohydrates * weight / 100 / config.Settings.Carbohydrates * 100,
-				Proteins:      product.Proteins * weight / 100 / config.Settings.Proteins * 100,
-				Fats:          product.Fats * weight / 100 / config.Settings.Fats * 100,
-				Calories:      product.Calories * weight / 100 / config.Settings.Calories * 100,
-			}
-
-			myTpl := template.Must(
-				template.New("productImpactTpl").Parse(tplutil.Strip(
-					productImpactTpl,
-				)))
-
-			buf := bytes.NewBuffer([]byte{})
-			myTpl.Execute(buf, impact)
-
-			fmt.Print(buf.String())
-		}
-	}
+	fmt.Print(productImpact(productName, weight))
 }
 
 func settingsShow() {

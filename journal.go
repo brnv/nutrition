@@ -40,46 +40,45 @@ const journalShowTpl = `
 		{{.Day}}
 		{{"\n"}}
 		Breakfast:
-		{{"\n"}}
+			{{"\n"}}
 			{{range .Breakfast.Products}}
-				{{.Name}}, {{.Weight}} {{calculate .Name}}
+				{{.Name}}, {{.Weight}} ({{calculate .Name .Weight}})
 				{{"\n"}}
-
 			{{end}}
 		Snack:
 		{{"\n"}}
 			{{range .Snack.Products}}
-				{{.Name}}, {{.Weight}}
+				{{.Name}}, {{.Weight}} ({{calculate .Name .Weight}})
 				{{"\n"}}
 			{{end}}
 		Lunch:
 		{{"\n"}}
 			{{range .Lunch.Products}}
-				{{.Name}}, {{.Weight}}
+				{{.Name}}, {{.Weight}} ({{calculate .Name .Weight}})
 				{{"\n"}}
 			{{end}}
 		Dinner:
 		{{"\n"}}
 			{{range .Dinner.Products}}
-				{{.Name}}, {{.Weight}}
+				{{.Name}}, {{.Weight}} ({{calculate .Name .Weight}})
 				{{"\n"}}
 			{{end}}
 		{{"\n"}}
 	{{end}}
 `
 
-func calculate(productName string) string {
-	return productName
-}
-
-var funcs = template.FuncMap{
-	"calculate": calculate,
+func calculate(productName string, weight float64) string {
+	return productImpact(productName, weight)
 }
 
 //@TODO: do template parsing in initialize function
 func (journal Journal) String() string {
 	myTpl := template.Must(
-		template.New("journalShowTpl").Funcs(funcs).Parse(tplutil.Strip(
+		template.New("journalShowTpl").Funcs(
+			template.FuncMap{
+				"calculate": calculate,
+			},
+		).Parse(tplutil.Strip(
 			journalShowTpl,
 		)))
 
